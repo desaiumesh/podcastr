@@ -9,6 +9,10 @@ const nextConfig = {
             {
                 protocol:'https',
                 hostname : 'precious-ostrich-645.convex.cloud'
+            },
+            {
+                protocol:'https',
+                hostname : 'img.clerk.com'
             }
         ]
     }

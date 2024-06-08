@@ -11,7 +11,7 @@ const LeftSidebar = () => {
     const router = useRouter();
 
     return (
-        <section className='left-sidebar text-white-1'>
+        <section className='left_sidebar text-white-1'>
             <nav className='flex flex-col gap-6 max-sm:hidden'>
                 <Link href="/" className='flex cursor-pointer items-center gap-1 pb-10 max-lg:justify-center'>
                     <Image src="/icons/logo.svg" alt="logo" width={23} height={27}></Image>
