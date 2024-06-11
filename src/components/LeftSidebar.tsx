@@ -2,7 +2,7 @@
 
 import { sidebarLinks } from '@/constants'
 import { cn } from '@/lib/utils'
-import { SignedIn, SignedOut, useClerk } from '@clerk/nextjs';
+import { SignedIn, SignedOut, useClerk, useUser } from '@clerk/nextjs';
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
@@ -11,6 +11,7 @@ import { Button } from './ui/button';
 import { useAudio } from '@/app/providers/AudioProvider';
 
 const LeftSidebar = () => {
+  const { user } = useUser();
   const pathname = usePathname();
   const router = useRouter();
   const { signOut } = useClerk();
@@ -27,9 +28,11 @@ const LeftSidebar = () => {
         </Link>
 
         {sidebarLinks.map(({ route, label, imgURL }) => {
-          const isActive = pathname === route || pathname.startsWith(`${route}/`);
 
-          return <Link href={route} key={label} className={cn("flex gap-3 items-center py-4 max-lg:px-4 justify-center lg:justify-start", {
+          const routePath = route.startsWith('/profile')? `/profile/${user?.id}` : route;
+          const isActive = pathname === routePath || pathname.startsWith(`${routePath}/`);
+          
+          return <Link href={routePath} key={label} className={cn("flex gap-3 items-center py-4 max-lg:px-4 justify-center lg:justify-start", {
             'bg-nav-focus border-r-4 border-orange-1': isActive
           })}>
             <Image src={imgURL} alt={label} width={24} height={24} />
