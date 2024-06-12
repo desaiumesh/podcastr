@@ -8,6 +8,8 @@ import { cn } from "@/lib/utils";
 import { useAudio } from "@/app/providers/AudioProvider";
 
 import { Progress } from "@/components/ui/progress";
+import { useMutation } from "convex/react";
+import { api } from "../../convex/_generated/api";
 
 const PodcastPlayer = () => {
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -16,6 +18,8 @@ const PodcastPlayer = () => {
   const [isMuted, setIsMuted] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const { audio } = useAudio();
+  const updatePodcastViews = useMutation(api.podcasts.updatePodcastViews);
+
 
   const togglePlayPause = () => {
     if (audioRef.current?.paused) {
@@ -83,9 +87,16 @@ const PodcastPlayer = () => {
       setIsPlaying(true);
     }
   }, [audio]);
-  const handleLoadedMetadata = () => {
+
+  const handleLoadedMetadata = async() => {
     if (audioRef.current) {
       setDuration(audioRef.current.duration);
+     
+      try {
+        await updatePodcastViews({ podcastId : audio?.podcastId! });
+      } catch (error) {
+        console.error("Error updating  podcast views", error);
+      }
     }
   };
 
@@ -159,9 +170,9 @@ const PodcastPlayer = () => {
             />
           </div>
         </div>
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-5">
           <h2 className="text-16 font-normal text-white-2 max-md:hidden">
-            {formatTime(duration)}
+            {formatTime(currentTime)}/{ formatTime(duration)}
           </h2>
           <div className="flex w-full gap-2">
             <Image

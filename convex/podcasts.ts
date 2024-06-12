@@ -100,12 +100,45 @@ export const getPodcastById = query({
   },
 });
 
-// this query will get the podcasts based on the views of the podcast , which we are showing in the Trending Podcasts section.
+// this query will get the podcasts based on the views of the podcast in the last 5 days
 export const getTrendingPodcasts = query({
   handler: async (ctx) => {
-    const podcast = await ctx.db.query("podcasts").collect();
 
+    const currentTime = Date.now();
+    const podcastInLastNumberOfDays =  5;
+    
+    const daysAgo = currentTime - (podcastInLastNumberOfDays * 24 * 60 * 60 *1000);
+
+    const podcast = await ctx.db.query("podcasts")
+    .filter((q) => q.gte(q.field("_creationTime"), daysAgo))
+    .collect();
+    
     return podcast.sort((a, b) => b.views - a.views).slice(0, 8);
+  },
+});
+
+//Get Popular podcasts (By views)
+export const getPopularPodcasts = query({
+  handler: async (ctx) => {
+    const podcast = await ctx.db.query("podcasts").collect();
+    return podcast.sort((a, b) => b.views - a.views).slice(0, 8);
+  },
+});
+
+//Get latest podcasts (Podcasts created in last 4 days)
+export const getLatestPodcasts = query({
+  handler: async (ctx) => {
+
+    const currentTime = Date.now();
+    const podcastInLastNumberOfDays =  4;
+    
+    const daysAgo = currentTime - (podcastInLastNumberOfDays * 24 * 60 * 60 *1000);
+
+    const podcast = await ctx.db.query("podcasts")
+    .filter((q) => q.gte(q.field("_creationTime"), daysAgo))
+    .collect();
+
+    return podcast.sort((a) => a._creationTime).slice(0, 4);
   },
 });
 

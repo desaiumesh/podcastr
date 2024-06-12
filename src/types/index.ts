@@ -97,7 +97,7 @@ export interface AudioProps {
   audioUrl: string;
   author: string;
   imageUrl: string;
-  podcastId: string;
+  podcastId: Id<"podcasts">;
 }
 
 export interface AudioContextType {
@@ -109,6 +109,14 @@ export interface PodcastCardProps {
   imgUrl: string;
   title: string;
   description: string;
+  podcastId: Id<"podcasts">;
+}
+
+export interface PodcastDetailCardProps {
+  imgUrl: string;
+  title: string;
+  views: number;
+  audioDuration: number;
   podcastId: Id<"podcasts">;
 }
 

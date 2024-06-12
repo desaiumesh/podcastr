@@ -29,7 +29,7 @@ const PodcastDetailPlayer = ({
   const { toast } = useToast();
   const [isDeleting, setIsDeleting] = useState(false);
   const deletePodcast = useMutation(api.podcasts.deletePodcast);
-
+ 
   const handleDelete = async () => {
     try {
       await deletePodcast({ podcastId, imageStorageId, audioStorageId });
@@ -46,7 +46,8 @@ const PodcastDetailPlayer = ({
     }
   };
 
-  const handlePlay = () => {
+  
+  const handlePlay = async () => {
     setAudio({
       title: podcastTitle,
       audioUrl,
@@ -54,6 +55,7 @@ const PodcastDetailPlayer = ({
       author,
       podcastId,
     });
+
   };
 
   if (!imageUrl || !authorImageUrl) return <LoaderSpinner />;
